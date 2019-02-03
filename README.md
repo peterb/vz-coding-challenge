@@ -7,8 +7,14 @@ To get the application up and running you'll need to install:
 * Bundled gems and their native extensions which compile to binary on your platform.
 
 You'll also have to create a role named after your system username, and a database
-for the app owned by that user in PostgreSQL via psql. If set up plainly, you can
-leave the database.yml file as-is.
+for the app owned by that user in PostgreSQL via psql. In order to run the tests,
+you will also need to create the test database.
+
+You can run them:
+
+rails test test/integration/interface_to_filterable_charts_test.rb
+
+If set up plainly, you can leave the database.yml file as-is.
 
 Other things that will be covered here soon:
 
@@ -17,8 +23,6 @@ Other things that will be covered here soon:
 * Configuration
 
 * Database initialization
-
-* How to run the test suite
 
 * Services (job queues, cache servers, search engines, etc.)
 
