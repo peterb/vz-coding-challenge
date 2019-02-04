@@ -12,7 +12,7 @@ you will also need to create the test database.
 
 You can run them:
 
-rails test test/integration/interface_to_filterable_charts_test.rb
+rails test test/integration/interface_to_filterable_charts_test.rb; rails test test/models/sector_test.rb; rails test test/models/emission_test.rb
 
 If set up plainly, you can leave the database.yml file as-is.
 
