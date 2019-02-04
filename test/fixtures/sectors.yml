@@ -1,0 +1,12 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Total including LULUCF
+
+two:
+  name: Energy
+  sector: one
+
+three:
+  name: Fugitive Emissions from Oil and Gas
+  sector: two

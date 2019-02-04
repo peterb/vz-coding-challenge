@@ -4,6 +4,9 @@ require 'test_helper'
 # when it's imported. Currently out by a factor of 10 i.e.
 # 3.59e8 will have to be changed to 3.59e9.
 class InterfaceToFilterableChartsTest < ActionDispatch::IntegrationTest
+
+  # Tests immediately below don't pass, further down they pass though.
+
   test "Emissions can be filtered by territories such as planets." do
   	results = Territory.where(code: 'EARTH').years.where(name: '2014').emissions.sum(:retrieve_tonnage)
   	assert_not_nil(results)
@@ -33,10 +36,25 @@ class InterfaceToFilterableChartsTest < ActionDispatch::IntegrationTest
   	results = Sector.where(name: 'Agriculture').emissions.sum(:retrieve_tonnage)
   end
 
-  test "Sectors have parent sectors." do
-    assert(Sector.where(name: 'Fugitive Emissions from Oil and Gas').parent == Sector.where(name: 'Energy'))
-    assert(Sector.where(name: 'Energy').parent == Sector.where(name: 'Total including LULUCF'))
+  ## Tests below pass.
+
+  test "Sectors exist." do
+    assert(Sector.where(name: 'Energy').present?)
   end
+
+  test "Some sectors have one simple mother." do
+    assert(Sector.where(name: 'Fugitive Emissions from Oil and Gas').first.mother == Sector.where(name: 'Energy').first)
+  end
+
+  test "Some sectors have one complex mother." do
+    assert(Sector.where(name: 'Energy').first.mother == Sector.where(name: 'Total including LULUCF').first)
+  end
+
+  test "Some sectors have one grandmother." do
+    assert(Sector.where(name: 'Fugitive Emissions from Oil and Gas').first.grandmother == Sector.where(name: 'Total including LULUCF').first)
+  end
+
+  ## These tests don't pass yet.
 
   test "Earth C02 emissions in tonnes for 2014 match www.co2.earth/global-co2-emissions." do
   	results = Territory.where(code: 'EARTH').years.where(name: '2014').emissions.sum(:retrieve_tonnage)

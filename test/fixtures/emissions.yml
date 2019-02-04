@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  territory_id: 1
+  sector_id: 1
+  year_id: 1
+  tonnage: 0.0419
+
+two:
+  territory_id: 1
+  sector_id: 1
+  year_id: 1
+  tonnage: 0.0441
