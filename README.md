@@ -41,5 +41,8 @@ Rails models via migrations for further analysis and use in filterable charts.
 
 # App architecture.
 
-There are four objects in the data to be imported via CSV, their relationships
-are graphed in object-sketch.jpg.
+There are four objects in the data to be imported via CSV, here's a graph
+of the relationships:
+
+![Relationship graph](object-sketch.jpg?raw=true "Relationship graph")
+
