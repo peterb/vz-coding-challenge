@@ -38,3 +38,8 @@ It will be used to import a large dataset (just under 50'000 rows) pertaining
 to Carbon Emissions (CO<sub>2</sub>) by country, sector and region from 1850
 until 2014 in a CSV file in an as of yet unknown format and imports it into
 Rails models via migrations for further analysis and use in filterable charts.
+
+# App architecture.
+
+There are four objects in the data to be imported via CSV, their relationships
+are graphed in object-sketch.jpg.
