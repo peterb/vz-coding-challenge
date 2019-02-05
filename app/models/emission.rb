@@ -1,3 +1,5 @@
+# Atmospheric CO2 is a liability, so crediting it increases
+# and debiting decreases it.
 class Emission < ApplicationRecord
   belongs_to :sector
   belongs_to :territory

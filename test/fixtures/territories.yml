@@ -3,5 +3,6 @@
 aruba:
   code: ABW
 
-two:
-  code: MyString
+world:
+  code: WORLD
+

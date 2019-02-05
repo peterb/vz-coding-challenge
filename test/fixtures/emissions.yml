@@ -7,7 +7,13 @@ one:
   credit: 0.0419
 
 two:
-  territory_id: 1
-  sector_id: 1
-  period_id: 1
+  territory: aruba
+  sector: total_including_lulucf
+  period: eighteenfiftyone
   credit: 0.0441
+
+fiftyseven:
+  territory: world
+  sector: total_including_lulucf
+  period: eighteenfifty
+  credit: 2050
