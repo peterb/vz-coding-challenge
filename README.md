@@ -14,9 +14,34 @@ You can run them:
 
 rails test test/integration/interface_to_filterable_charts_test.rb; rails test test/models/sector_test.rb; rails test test/models/emission_test.rb
 
+# What this app does and what it will be used for.
+
+The test dataset for this app is 5'000 rows long.
+
+It will be used to import a large dataset (just under 50'000 rows) pertaining 
+to Carbon Emissions (CO<sub>2</sub>) by country, sector and region from 1850
+until 2014 in a CSV file in an as of yet unknown format and imports it into
+Rails models via migrations for further analysis and use in filterable charts.
+
+# App architecture.
+
+There are four objects in the data to be imported via CSV, Sector, Emission,
+Territory and Period.
+
+Units used for credits and debits are tonnes. Emissions are a liability, so
+crediting them increases, and debiting them decreases any agregate.
+
+I've modeled them as an accounting transaction to decrease ambiguity and
+safeguard operations surrounding negative or positive numbers as they are
+present in data.
+
+The floating point features of Ruby and PostgreSQL, depending on their
+respective versions, and model validations, ought to cover the rest of
+the data integrity and correctness aspects of storage and computation.
+
 If set up plainly, you can leave the database.yml file as-is.
 
-Other things that will be covered here soon:
+# Other things that will be covered here soon:
 
 * System dependencies
 
@@ -29,20 +54,3 @@ Other things that will be covered here soon:
 * Deployment instructions
 
 * ...
-
-# What this app does and what it will be used for.
-
-The test dataset for this app is 5'000 rows long.
-
-It will be used to import a large dataset (just under 50'000 rows) pertaining 
-to Carbon Emissions (CO<sub>2</sub>) by country, sector and region from 1850
-until 2014 in a CSV file in an as of yet unknown format and imports it into
-Rails models via migrations for further analysis and use in filterable charts.
-
-# App architecture.
-
-There are four objects in the data to be imported via CSV, here's a graph
-of the relationships:
-
-![Relationship graph](object-sketch.jpg?raw=true "Relationship graph")
-

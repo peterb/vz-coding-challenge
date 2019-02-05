@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_04_131919) do
+ActiveRecord::Schema.define(version: 2019_02_05_123103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,8 +18,15 @@ ActiveRecord::Schema.define(version: 2019_02_04_131919) do
   create_table "emissions", force: :cascade do |t|
     t.integer "territory_id"
     t.integer "sector_id"
-    t.integer "year_id"
-    t.float "tonnage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "credit"
+    t.float "debit"
+    t.integer "period_id"
+  end
+
+  create_table "periods", force: :cascade do |t|
+    t.integer "year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -27,6 +34,12 @@ ActiveRecord::Schema.define(version: 2019_02_04_131919) do
   create_table "sectors", force: :cascade do |t|
     t.string "name"
     t.integer "sector_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "territories", force: :cascade do |t|
+    t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

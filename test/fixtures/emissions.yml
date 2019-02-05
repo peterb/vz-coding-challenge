@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  territory_id: 1
-  sector_id: 1
-  year_id: 1
-  tonnage: 0.0419
+  territory: aruba
+  sector: total_including_lulucf
+  period: eighteenfifty
+  credit: 0.0419
 
 two:
   territory_id: 1
   sector_id: 1
-  year_id: 1
-  tonnage: 0.0441
+  period_id: 1
+  credit: 0.0441
