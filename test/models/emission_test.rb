@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class EmissionTest < ActiveSupport::TestCase
-  test "Emissions exist." do  	
+  test "Emissions exist." do
     assert(Emission.where(credit: 0.0419).present?)
   end
 
