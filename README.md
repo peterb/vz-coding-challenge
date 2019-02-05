@@ -10,9 +10,22 @@ You'll also have to create a role named after your system username, and a databa
 for the app owned by that user in PostgreSQL via psql. In order to run the tests,
 you will also need to create the test database.
 
-You can run them:
+You can run them together:
 
-rails test test/integration/interface_to_filterable_charts_test.rb; rails test test/models/sector_test.rb; rails test test/models/emission_test.rb
+```bash
+rails test
+```
+Or seperately:
+
+```bash
+rails test test/integration/interface_to_filterable_charts_test.rb;
+rails test test/models/sector_test.rb;
+rails test test/models/emission_test.rb;
+rails test test/models/period_test.rb;
+rails test test/models/territory_test.rb
+```
+
+Fixtures are used and are present for all models.
 
 # What this app does and what it will be used for.
 
