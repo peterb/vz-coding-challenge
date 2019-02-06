@@ -17,14 +17,14 @@ class Emission < ApplicationRecord
 
   private
 
-  def conformity_of_entry
-    if is_ambiguous?
-      errors.add(:debit, "there is also a credit.")
-      errors.add(:credit, "there is also a debit.")
+    def conformity_of_entry
+      if is_ambiguous?
+        errors.add(:debit, "there is also a credit.")
+        errors.add(:credit, "there is also a debit.")
+      end
     end
-  end
 
-  def is_ambiguous?
-    credit.present? && debit.present?
-  end
+    def is_ambiguous?
+      credit.present? && debit.present?
+    end
 end
