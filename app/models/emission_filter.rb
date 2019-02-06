@@ -42,8 +42,7 @@ class EmissionFilter
     end
 
     def sector
-      Sector.where(name: @sector_name).first
-    # Sector.where("lower(name) = ?", @sector_name.downcase).first
+      Sector.where("lower(name) = ?", @sector_name.downcase).first
     end
 
     def from_sector

@@ -26,4 +26,10 @@ class InterfaceToFilterableChartsTest < ActionDispatch::IntegrationTest
     filter.sector_name = 'Total including LULUCF'
     assert(filter.total == 2050.086)
   end
+
+  test "Emissions can be filtered by sector case insensitive." do
+    filter = EmissionFilter.new
+    filter.sector_name = 'TotAl incLuDING luluCF'
+    assert(filter.total == 2050.086)
+  end
 end
