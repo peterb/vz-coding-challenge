@@ -1,5 +1,6 @@
 class Sector < ApplicationRecord
   belongs_to :sector, optional: true
+  has_many :emissions
 
   def mother
     sector

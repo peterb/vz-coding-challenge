@@ -20,4 +20,10 @@ class InterfaceToFilterableChartsTest < ActionDispatch::IntegrationTest
     filter.year = 1851
     assert(filter.total == 0.0)
   end
+
+  test "Emissions can be filtered by sector." do
+    filter = EmissionFilter.new
+    filter.sector_name = 'Total including LULUCF'
+    assert(filter.total == 2050.086)
+  end
 end
