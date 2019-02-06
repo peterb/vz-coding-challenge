@@ -4,13 +4,25 @@ class EmissionFilter
 
   def results
     if @year.present?
-      from_territory_in(@year).inject(0){|running_total, emission| running_total += emission.retrieve_tonnage }
+      from_territory_in(@year)
     else
-      from_territory.inject(0){|running_total, emission| running_total += emission.retrieve_tonnage }
+      from_territory
+    end
+  end
+
+  def total
+    if @year.present?
+      sum_tonnage(from_territory_in(@year))
+    else
+      sum_tonnage(from_territory)
     end
   end
 
   private
+
+    def sum_tonnage(emissions)
+      emissions.inject(0){|running_total, emission| running_total += emission.retrieve_tonnage }
+    end
 
     def territory
       Territory.where(code: @territory_code).first
