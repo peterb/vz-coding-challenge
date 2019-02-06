@@ -7,8 +7,11 @@ class Sector < ApplicationRecord
   end
 
   def grandmother
-    return sector.sector if sector.present? && sector.sector.present?
+    return sector.sector if grandmother_present?
   end
 
   private
+    def grandmother_present?
+      sector.present? && sector.sector.present?
+    end
 end
