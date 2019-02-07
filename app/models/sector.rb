@@ -2,6 +2,8 @@ class Sector < ApplicationRecord
   belongs_to :sector, optional: true
   has_many :emissions
 
+  validates :name,  uniqueness: true
+
   def mother
     sector
   end

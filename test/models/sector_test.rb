@@ -16,4 +16,10 @@ class SectorTest < ActiveSupport::TestCase
   test "Some sectors have one grandmother." do
     assert(Sector.where(name: 'Fugitive Emissions from Oil and Gas').first.grandmother == Sector.where(name: 'Total including LULUCF').first)
   end
+
+  test "Sector names are unique." do
+    sector = Sector.new
+    sector.name = "Energy"
+    assert !sector.save
+  end
 end

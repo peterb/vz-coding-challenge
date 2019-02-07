@@ -1,5 +1,7 @@
 # README
 
+# Setup
+
 To get the application up and running you'll need to install:
 
 * Ruby 2.3.2
@@ -9,6 +11,8 @@ To get the application up and running you'll need to install:
 You'll also have to create a role named after your system username, and a database
 for the app owned by that user in PostgreSQL via psql. In order to run the tests,
 you will also need to create the test database.
+
+# Running Tests
 
 You can run them together:
 
@@ -26,6 +30,14 @@ rails test test/models/territory_test.rb
 ```
 
 Fixtures are used and are present for all models.
+
+# Importing Data With Rake
+
+To find out the Rake tasks availabl which load the CSV file into the database, run:
+
+```bash
+rake -T | grep csv
+```
 
 # What this app does and what it will be used for.
 
