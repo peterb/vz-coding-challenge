@@ -2,9 +2,26 @@ require 'csv'
 
 namespace :co2data do
   desc "Load CSV of CO2 data."
-  task load: [:periods, :territories, :sectors] do
+  task load: [:periods, :territories, :sector_linking] do
     puts DateTime.now.rfc2822 + " CO2 data load completed"
     @handler.close
+  end
+
+  task sector_linking: :sectors do
+    puts DateTime.now.rfc2822 + " Starting sector linking."
+    CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
+      unless count == 0 || row[2].nil?
+        sector = Sector.where(name: row[1]).first
+        unless sector.sector.present?
+          sector.sector = Sector.where(name: row[2]).first
+          if sector.save
+            @handler.write DateTime.now.rfc2822 + " associated sector " + row[1] + " with mother sector " + row[2] + "."
+            @handler.write "\n"
+          end
+        end
+      end
+    end
+    puts DateTime.now.rfc2822 + " Sector linking completed."
   end
 
   task territories: :start do
@@ -29,18 +46,6 @@ namespace :co2data do
         if sector.save
           @handler.write DateTime.now.rfc2822 + " Added sector " + row[1]
           @handler.write "\n"
-        end
-      end
-    end
-    CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
-      unless count == 0 || row[2].nil?
-        sector = Sector.where(name: row[1]).first
-        unless sector.sector.present?
-          sector.sector = Sector.where(name: row[2]).first
-          if sector.save
-            @handler.write DateTime.now.rfc2822 + " associated sector " + row[1] + " with mother sector " + row[2] + "."
-            @handler.write "\n"
-          end
         end
       end
     end
