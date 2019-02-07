@@ -32,6 +32,18 @@ namespace :co2data do
         end
       end
     end
+    CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
+      unless count == 0 || row[2].nil?
+        sector = Sector.where(name: row[1]).first
+        unless sector.sector.present?
+          sector.sector = Sector.where(name: row[2]).first
+          if sector.save
+            @handler.write DateTime.now.rfc2822 + " associated sector " + row[1] + " with mother sector " + row[2] + "."
+            @handler.write "\n"
+          end
+        end
+      end
+    end
     puts DateTime.now.rfc2822 + " Sectors load completed."
   end
 
