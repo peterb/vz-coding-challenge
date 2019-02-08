@@ -31,12 +31,40 @@ rails test test/models/territory_test.rb
 
 Fixtures are used and are present for all models.
 
-# Importing Data With Rake
+# Loading Data With Rake
 
 To find out the Rake tasks available which load the CSV file into the database, run:
 
 ```bash
 rake -T | grep co2
+```
+
+To import the data, first drop, create and run migrations as needed:
+
+```bash
+rake db:drop
+rake db:create
+rake db:migrate
+```
+
+Then run co2 load:
+
+```bash
+rake co2data:load
+```
+
+It will log general operation straight to the console, and detailed information
+to a logfile in:
+
+```bash
+~/Downloads/co2data_load.log
+```
+
+The task will take a few minutes to complete depending on the size of the co2 csv
+data file to be loaded, which should be placed in:
+
+```bash
+~/Downloads/emissions.csv
 ```
 
 # What this app does and what it will be used for.
