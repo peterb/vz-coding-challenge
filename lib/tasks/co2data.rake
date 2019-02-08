@@ -18,32 +18,28 @@ namespace :co2data do
 
   task emissions: [:periods, :territories, :sector_linking] do
     write_to_console DateTime.now.rfc2822 + " Starting emissions load."
-    CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
-      unless count == 0 # header row
-        emission = Emission.new
-        @years.each do |year|
-          column_index = 3 + @years.index(year)
-          if row[column_index].to_f.positive?
-            emission.credit = row[column_index].to_f
-          elsif row[column_index].to_f.negative?
-            emission.debit = row[column_index].to_f.abs
-          end
-          emission.period = Period.where(year: year).first
-          emission.territory = Territory.where(code: row[0]).first
-          emission.sector = Sector.where(name: row[1]).first
-          if emission.save
-            message = DateTime.now.rfc2822 + " Added emission " + row[column_index]
-            if emission.credit.present?
-              message += " credit: #{emission.credit} "
-            elsif emission.debit.present?
-              message += " debit: #{emission.debit}"
+    Emission.transaction do
+      CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
+        unless count == 0 # header row
+          emissions = []
+          emission = Emission.new
+          @years.each do |year|
+            column_index = 3 + @years.index(year)
+            if row[column_index].to_f.positive?
+              emission.credit = row[column_index].to_f
+            elsif row[column_index].to_f.negative?
+              emission.debit = row[column_index].to_f.abs
             end
-            message += " territory: #{row[0]}"
-            message += " sector: #{row[1]}"
-            message += " year: #{year}"
-            message += " row #{count} column #{column_index}."
-            write_to_log message
+            emission.period = Period.where(year: year).first
+            emission.territory = Territory.where(code: row[0]).first
+            emission.sector = Sector.where(name: row[1]).first
+            emissions << emission
           end
+          Emission.import(emissions)
+          message = "Row #{count} loaded. Added emissions for all years available (#{emissions.count}),"
+          message += " territory: #{row[0]}"
+          message += " sector: #{row[1]}."
+          write_to_log message
         end
       end
     end

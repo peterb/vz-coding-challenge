@@ -60,12 +60,39 @@ to a logfile in:
 ~/Downloads/co2data_load.log
 ```
 
-The task will take a few minutes to complete depending on the size of the co2 csv
-data file to be loaded, which should be placed in:
+The task will take a few hours to complete depending on the hardware its run on
+and the size of the co2 csv data file to be loaded which should be placed in:
 
 ```bash
 ~/Downloads/emissions.csv
 ```
+
+The data loading doesn't use much RAM, about 2MB, but CPU load spikes very quickly
+when starting the task. Initial benchmarks on a modern laptop are:
+
+2m row 66 = 1.188s (seconds) per row
+4m row 155 = 1.548s per row
+12m row 500 = 1.44s per row
+27m row 1165 = 1.39s per row
+
+This means the load task for the sample data set would take around 2.1 hours,for
+the full data set, 21 hours. Although feasible,this means waiting a couple of days
+to load data. Optimizations have been applied to the way in which Emission data
+points are created and saved to the database:
+
+By using a single database transaction, benchmark is:
+
+2m row 100, 1.2s per row
+
+Or 1.6 hours, 16 hours for the whole dataset.
+
+By reducing the number of INSERT statements, benchmarks are:
+
+53s row 100 = 0.53s per row
+
+Or 0.71 hours, 7.1 hours for the whole dataset, which means that
+data can be reloaded overnight on a single CPU.
+
 
 # What this app does and what it will be used for.
 
