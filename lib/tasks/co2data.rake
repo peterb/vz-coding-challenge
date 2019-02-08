@@ -29,6 +29,9 @@ namespace :co2data do
             elsif emission.debit.present?
               @handler.print " debit: #{emission.debit}"
             end
+            @handler.print " territory: #{row[0]}"
+            @handler.print " sector: #{row[1]}"
+            @handler.print " year: #{year}"
             @handler.print " row #{count} column #{column_index}."
             @handler.write "\n"
           end

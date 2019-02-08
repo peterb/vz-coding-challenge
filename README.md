@@ -33,10 +33,10 @@ Fixtures are used and are present for all models.
 
 # Importing Data With Rake
 
-To find out the Rake tasks availabl which load the CSV file into the database, run:
+To find out the Rake tasks available which load the CSV file into the database, run:
 
 ```bash
-rake -T | grep csv
+rake -T | grep co2
 ```
 
 # What this app does and what it will be used for.
