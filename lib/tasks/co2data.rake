@@ -1,28 +1,23 @@
 require 'csv'
 
-def print_to_log(message)
-  handler = Logger.new(ENV['HOME'] + "/Downloads/co2data_load.log")
-  handler.info message
-end
-
 def write_to_log(message)
   handler = Logger.new(ENV['HOME'] + "/Downloads/co2data_load.log")
   handler.info message
 end
 
-def puts_to_log(message)
-  handler = Logger.new(ENV['HOME'] + "/Downloads/co2data_load.log")
+def write_to_console(message)
+  handler = Logger.new(STDOUT)
   handler.info message
 end
 
 namespace :co2data do
   desc "Load CSV of CO2 data."
   task load: :emissions do
-    puts DateTime.now.rfc2822 + " CO2 data load completed"
+    write_to_console DateTime.now.rfc2822 + " CO2 data load completed"
   end
 
   task emissions: [:periods, :territories, :sector_linking] do
-    puts DateTime.now.rfc2822 + " Starting emissions load."
+    write_to_console DateTime.now.rfc2822 + " Starting emissions load."
     CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
       unless count == 0 # header row
         emission = Emission.new
@@ -47,32 +42,32 @@ namespace :co2data do
             message += " sector: #{row[1]}"
             message += " year: #{year}"
             message += " row #{count} column #{column_index}."
-            print_to_log message
+            write_to_log message
           end
         end
       end
     end
-    puts DateTime.now.rfc2822 + " Emissions load completed."
+    write_to_console DateTime.now.rfc2822 + " Emissions load completed."
   end
 
   task sector_linking: :sectors do
-    puts DateTime.now.rfc2822 + " Starting sector linking."
+    write_to_console DateTime.now.rfc2822 + " Starting sector linking."
     CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
       unless count == 0 || row[2].nil?
         sector = Sector.where(name: row[1]).first
         unless sector.sector.present?
           sector.sector = Sector.where(name: row[2]).first
           if sector.save
-            print_to_log " Associated sector " + row[1] + " with mother sector " + row[2] + "."
+            write_to_log " Associated sector " + row[1] + " with mother sector " + row[2] + "."
           end
         end
       end
     end
-    puts DateTime.now.rfc2822 + " Sector linking completed."
+    write_to_console DateTime.now.rfc2822 + " Sector linking completed."
   end
 
   task territories: :start do
-    puts DateTime.now.rfc2822 + " Starting territories load."
+    write_to_console DateTime.now.rfc2822 + " Starting territories load."
     CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
       unless count == 0 # header row
         territory = Territory.new(code: row[0])
@@ -81,11 +76,11 @@ namespace :co2data do
         end
       end
     end
-    puts DateTime.now.rfc2822 + " Territories load completed."
+    write_to_console DateTime.now.rfc2822 + " Territories load completed."
   end
 
   task sectors: :start do
-    puts DateTime.now.rfc2822 + " Starting sectors load."
+    write_to_console DateTime.now.rfc2822 + " Starting sectors load."
     CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").with_index do |row, count|
       unless count == 0
         sector = Sector.new(name: row[1])
@@ -94,28 +89,26 @@ namespace :co2data do
         end
       end
     end
-    puts DateTime.now.rfc2822 + " Sectors load completed."
+    write_to_console DateTime.now.rfc2822 + " Sectors load completed."
   end
 
   task periods: :start do
-    puts DateTime.now.rfc2822 + " Starting periods load."
+    write_to_console DateTime.now.rfc2822 + " Starting periods load."
     header_row = CSV.foreach(ENV['HOME'] + "/Downloads/emissions.csv").first
     @years = header_row[3..header_row.length-1]
     @years.each do |year|
       period = Period.new
       period.year = year
       if period.save
-        puts_to_log " Added period " + year + "."
+        write_to_log " Added period " + year + "."
       end
     end
-    puts DateTime.now.rfc2822 + " Periods load completed."
+    write_to_console DateTime.now.rfc2822 + " Periods load completed."
   end
 
   task start: :environment do
-    print DateTime.now.rfc2822
-    print " Expecting header row in format Country, Sector, Parent sector, 1850, 1851, ... 2013, 2014 "
-    print "\n"
-    puts DateTime.now.rfc2822 + " Starting CO2 data load, this will take a few minutes, logfile is " + ENV['HOME'] + "/Downloads/co2data_load.log"
+    write_to_console " Expecting header row in format Country, Sector, Parent sector, 1850, 1851, ... 2013, 2014 "
+    write_to_console DateTime.now.rfc2822 + " Starting CO2 data load, this will take a few minutes, logfile is " + ENV['HOME'] + "/Downloads/co2data_load.log"
   end
 
   desc "Clean logfile."
