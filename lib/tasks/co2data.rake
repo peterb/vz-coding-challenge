@@ -1,10 +1,24 @@
 require 'csv'
 
+def print_to_log(message)
+  handler = Logger.new(ENV['HOME'] + "/Downloads/co2data_load.log")
+  handler.info message
+end
+
+def write_to_log(message)
+  handler = Logger.new(ENV['HOME'] + "/Downloads/co2data_load.log")
+  handler.info message
+end
+
+def puts_to_log(message)
+  handler = Logger.new(ENV['HOME'] + "/Downloads/co2data_load.log")
+  handler.info message
+end
+
 namespace :co2data do
   desc "Load CSV of CO2 data."
   task load: :emissions do
     puts DateTime.now.rfc2822 + " CO2 data load completed"
-    @handler.close
   end
 
   task emissions: [:periods, :territories, :sector_linking] do
@@ -23,17 +37,17 @@ namespace :co2data do
           emission.territory = Territory.where(code: row[0]).first
           emission.sector = Sector.where(name: row[1]).first
           if emission.save
-            @handler.print DateTime.now.rfc2822 + " Added emission " + row[column_index]
+            message = DateTime.now.rfc2822 + " Added emission " + row[column_index]
             if emission.credit.present?
-              @handler.print " credit: #{emission.credit} "
+              message += " credit: #{emission.credit} "
             elsif emission.debit.present?
-              @handler.print " debit: #{emission.debit}"
+              message += " debit: #{emission.debit}"
             end
-            @handler.print " territory: #{row[0]}"
-            @handler.print " sector: #{row[1]}"
-            @handler.print " year: #{year}"
-            @handler.print " row #{count} column #{column_index}."
-            @handler.write "\n"
+            message += " territory: #{row[0]}"
+            message += " sector: #{row[1]}"
+            message += " year: #{year}"
+            message += " row #{count} column #{column_index}."
+            print_to_log message
           end
         end
       end
@@ -49,8 +63,7 @@ namespace :co2data do
         unless sector.sector.present?
           sector.sector = Sector.where(name: row[2]).first
           if sector.save
-            @handler.write DateTime.now.rfc2822 + " associated sector " + row[1] + " with mother sector " + row[2] + "."
-            @handler.write "\n"
+            print_to_log " Associated sector " + row[1] + " with mother sector " + row[2] + "."
           end
         end
       end
@@ -64,8 +77,7 @@ namespace :co2data do
       unless count == 0 # header row
         territory = Territory.new(code: row[0])
         if territory.save
-          @handler.write DateTime.now.rfc2822 + " Added territory " + row[0]
-          @handler.write "\n"
+          write_to_log " Added territory " + row[0]
         end
       end
     end
@@ -78,8 +90,7 @@ namespace :co2data do
       unless count == 0
         sector = Sector.new(name: row[1])
         if sector.save
-          @handler.write DateTime.now.rfc2822 + " Added sector " + row[1]
-          @handler.write "\n"
+          write_to_log " Added sector " + row[1]
         end
       end
     end
@@ -94,7 +105,7 @@ namespace :co2data do
       period = Period.new
       period.year = year
       if period.save
-        @handler.puts DateTime.now.rfc2822 + " Added period " + year + "."
+        puts_to_log " Added period " + year + "."
       end
     end
     puts DateTime.now.rfc2822 + " Periods load completed."
@@ -105,7 +116,6 @@ namespace :co2data do
     print " Expecting header row in format Country, Sector, Parent sector, 1850, 1851, ... 2013, 2014 "
     print "\n"
     puts DateTime.now.rfc2822 + " Starting CO2 data load, this will take a few minutes, logfile is " + ENV['HOME'] + "/Downloads/co2data_load.log"
-    @handler = File.open(ENV['HOME'] + "/Downloads/co2data_load.log", 'w')
   end
 
   desc "Clean logfile."
